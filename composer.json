@@ -9,7 +9,7 @@
       "email": "email@example.com"
     }
   ],
-  "autoload-dev": {
+  "autoload": {
     "psr-4" : {
       "LocalBitcoins\\" : "src/"
     }

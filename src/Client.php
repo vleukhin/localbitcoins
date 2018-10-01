@@ -60,4 +60,32 @@ class Client
 
         return $this;
     }
+
+    /**
+     * Make API call
+     *
+     * @param string $url
+     * @param array  $data
+     */
+    protected function request(string $url, array $data)
+    {
+        $this->curl->setHeaders([
+            'Apiauth-Key'       => $this->key,
+            'Apiauth-Nonce'     => (string)$this->generateNonce(),
+            'Apiauth-Signature' => $this->getSignature(),
+        ]);
+    }
+
+    /**
+     * @return int
+     */
+    protected function generateNonce(): int
+    {
+        return (int)(microtime(true) * 10000);
+    }
+
+    protected function getSignature(): string
+    {
+        return '';
+    }
 }
