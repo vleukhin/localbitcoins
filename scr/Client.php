@@ -7,6 +7,8 @@
 
 namespace LocalBitcoins;
 
+use Curl\Curl;
+
 class Client
 {
     /**
@@ -19,9 +21,43 @@ class Client
      */
     protected $secret;
 
+    /**
+     * @var Curl
+     */
+    protected $curl;
+
+    /**
+     * @var string Host to make API calls
+     */
+    protected $host = 'https://localbitcoins.com';
+
+    /**
+     * Client constructor.
+     *
+     * @param string $key
+     * @param string $secret
+     *
+     * @throws \ErrorException
+     */
     public function __construct(string $key, string $secret)
     {
         $this->key = $key;
         $this->secret = $secret;
+        $this->curl = new Curl($this->host);
+    }
+
+    /**
+     * Set host
+     *
+     * @param string $host
+     *
+     * @return Client
+     */
+    public function setHost(string $host): Client
+    {
+        $this->host = $host;
+        $this->curl->setUrl($host);
+
+        return $this;
     }
 }
