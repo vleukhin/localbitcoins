@@ -1,0 +1,17 @@
+{
+  "name": "vleukhin/localbitcoins",
+  "description": "Localbitcoins api client",
+  "minimum-stability": "dev",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Viktor Leukhin",
+      "email": "email@example.com"
+    }
+  ],
+  "autoload-dev": {
+    "psr-4" : {
+      "LocalBitcoins\\" : "src/"
+    }
+  }
+}
