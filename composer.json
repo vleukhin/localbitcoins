@@ -13,5 +13,8 @@
     "psr-4" : {
       "LocalBitcoins\\" : "src/"
     }
+  },
+  "require": {
+    "php-curl-class/php-curl-class": "8.3.2"
   }
 }
