@@ -61,6 +61,11 @@ class Client
         return $this;
     }
 
+    public function test()
+    {
+        return $this->request('api/wallet', ['test' => 1, 'key' => '😑ufg']);
+    }
+
     /**
      * Make API call
      *
@@ -69,11 +74,19 @@ class Client
      */
     protected function request(string $url, array $data)
     {
+        $nonce = $this->generateNonce();
+
+        $signature = $this->getSignature($nonce, $url, $data);
+
+        var_dump($signature);
+
         $this->curl->setHeaders([
             'Apiauth-Key'       => $this->key,
-            'Apiauth-Nonce'     => (string)$this->generateNonce(),
-            'Apiauth-Signature' => $this->getSignature(),
+            'Apiauth-Nonce'     => (string)$nonce,
+            'Apiauth-Signature' => $signature,
         ]);
+
+        return true;
     }
 
     /**
@@ -84,8 +97,14 @@ class Client
         return (int)(microtime(true) * 10000);
     }
 
-    protected function getSignature(): string
+    protected function getSignature(int $nonce, string $url, array $data): string
     {
-        return '';
+        $params = http_build_query($data);
+
+        $message = (string)$nonce . $this->key . $url . $params;
+
+        var_dump($message);
+
+        return hash_hmac('sha256', $message, $this->key);
     }
 }
