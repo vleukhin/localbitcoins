@@ -83,7 +83,7 @@ class Client
 
         $result = $this->curl->{$method}($url, $data);
 
-        return $result;
+        return $result->data;
     }
 
     /**
@@ -144,6 +144,8 @@ class Client
      * Returns information of the currently
      * logged in user (the owner of authentication token)
      *
+     * https://localbitcoins.net/api-docs/#myself
+     *
      * @return mixed
      */
     public function myself()
@@ -154,27 +156,33 @@ class Client
     /**
      * Immediately expires the current access token.
      *
+     * @see https://localbitcoins.net/api-docs/#logout
+     *
      * @return mixed
      */
     public function logout()
     {
-        return $this->get('/api/logout/');
+        return $this->post('/api/logout/');
     }
 
     /**
      * Returns public user profile information.
      *
-     * @param string $nickname
+     * @see https://localbitcoins.net/api-docs/#account_info
+     *
+     * @param string $username
      *
      * @return mixed
      */
-    public function accountInfo(string $nickname)
+    public function accountInfo(string $username)
     {
-        return $this->get("/api/account_info/$nickname/");
+        return $this->get("/api/account_info/$username/");
     }
 
     /**
      * Returns Open and active trades.
+     *
+     * @see https://localbitcoins.net/api-docs/#dashboard
      *
      * @return mixed
      */
@@ -186,6 +194,8 @@ class Client
     /**
      * Returns released trades.
      *
+     * @see https://localbitcoins.net/api-docs/#dashboard-released
+     *
      * @return mixed
      */
     public function releasedTrades()
@@ -195,6 +205,8 @@ class Client
 
     /**
      * Returns canceled trades.
+     *
+     * @see https://localbitcoins.net/api-docs/#dashboard-canceled
      *
      * @return mixed
      */
@@ -206,6 +218,8 @@ class Client
     /**
      * Returns closed trades.
      *
+     * @see https://localbitcoins.net/api-docs/#dashboard-closed
+     *
      * @return mixed
      */
     public function closedTrades()
@@ -216,10 +230,66 @@ class Client
     /**
      * Returns a list of notifications.
      *
+     * @see https://localbitcoins.net/api-docs/#notifications
+     *
      * @return mixed
      */
     public function notifications()
     {
         return $this->get('/api/notifications/');
+    }
+
+    /**
+     * Marks a specific notification as read.
+     *
+     * @see https://localbitcoins.net/api-docs/#notifications-read
+     *
+     * @param int $id
+     */
+    public function readNotification(int $id)
+    {
+        $this->post("/api/notifications/mark_as_read/$id/");
+    }
+
+    /**
+     * Checks the given PIN code against the user's currently active PIN code.
+     *
+     * @param $pin 4 digit app PIN code set from profile settings
+     *
+     * @see https://localbitcoins.net/api-docs/#pin
+     *
+     * @return mixed
+     */
+    public function pincode($pin)
+    {
+        return $this->post('/api/pincode/', [
+            'pincode' => $pin,
+        ]);
+    }
+
+    /**
+     * Returns a list of real name verifiers of the user.
+     *
+     * @see https://localbitcoins.net/api-docs/#real-name-verifiers
+     *
+     * @param $username
+     *
+     * @return mixed
+     */
+    public function realNameVerifiers($username)
+    {
+        return $this->get("/api/real_name_verifiers/$username/");
+    }
+
+    /**
+     * Returns the 50 latest trade messages.
+     *
+     * https://localbitcoins.net/api-docs/#recent-messages
+     *
+     * @return mixed
+     */
+    public function recentMessages()
+    {
+        return $this->get('/api/recent_messages/');
     }
 }
