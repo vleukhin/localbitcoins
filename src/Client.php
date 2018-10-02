@@ -586,8 +586,8 @@ class Client
      */
     public function contactInfoList(array $contact_ids)
     {
-        $contacts = implode($contact_ids);
+        $contacts = implode(',', $contact_ids);
 
-        return $this->get("/api/contact_info", compact($contacts));
+        return $this->get('/api/contact_info', compact($contacts));
     }
 }
