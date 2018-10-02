@@ -87,6 +87,32 @@ class Client
     }
 
     /**
+     * Make GET request to API
+     *
+     * @param string $url
+     * @param array  $data
+     *
+     * @return mixed
+     */
+    protected function get(string $url, array $data = [])
+    {
+        return $this->request('get', $url, $data);
+    }
+
+    /**
+     * Make POST request to API
+     *
+     * @param string $url
+     * @param array  $data
+     *
+     * @return mixed
+     */
+    protected function post(string $url, array $data = [])
+    {
+        return $this->request('post', $url, $data);
+    }
+
+    /**
      * Generate request nonce
      *
      * @return int
@@ -122,7 +148,17 @@ class Client
      */
     public function myself()
     {
-        return $this->request('get', '/api/myself/');
+        return $this->get('/api/myself/');
+    }
+
+    /**
+     * Immediately expires the current access token.
+     *
+     * @return mixed
+     */
+    public function logout()
+    {
+        return $this->get('/api/logout/');
     }
 
     /**
@@ -134,7 +170,7 @@ class Client
      */
     public function accountInfo(string $nickname)
     {
-        return $this->request('get', "/api/account_info/$nickname/");
+        return $this->get("/api/account_info/$nickname/");
     }
 
     /**
@@ -144,6 +180,46 @@ class Client
      */
     public function dashboard()
     {
-        return $this->request('get', '/api/dashboard/');
+        return $this->get('/api/dashboard/');
+    }
+
+    /**
+     * Returns released trades.
+     *
+     * @return mixed
+     */
+    public function releasedTrades()
+    {
+        return $this->get('/api/dashboard/released/');
+    }
+
+    /**
+     * Returns canceled trades.
+     *
+     * @return mixed
+     */
+    public function canceledTrades()
+    {
+        return $this->get('/api/dashboard/canceled/');
+    }
+
+    /**
+     * Returns closed trades.
+     *
+     * @return mixed
+     */
+    public function closedTrades()
+    {
+        return $this->get('/api/dashboard/closed/');
+    }
+
+    /**
+     * Returns a list of notifications.
+     *
+     * @return mixed
+     */
+    public function notifications()
+    {
+        return $this->get('/api/notifications/');
     }
 }
