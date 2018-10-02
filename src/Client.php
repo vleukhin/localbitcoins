@@ -254,13 +254,13 @@ class Client
     /**
      * Checks the given PIN code against the user's currently active PIN code.
      *
-     * @param $pin 4 digit app PIN code set from profile settings
+     * @param string $pin 4 digit app PIN code set from profile settings
      *
      * @see https://localbitcoins.net/api-docs/#pin
      *
      * @return mixed
      */
-    public function pincode($pin)
+    public function pincode(string $pin)
     {
         return $this->post('/api/pincode/', [
             'pincode' => $pin,
@@ -291,5 +291,84 @@ class Client
     public function recentMessages()
     {
         return $this->get('/api/recent_messages/');
+    }
+
+    /**
+     * Returns information about the token owner's wallet balance.
+     *
+     * @see https://localbitcoins.net/api-docs/#wallet
+     *
+     * @return mixed
+     */
+    public function wallet()
+    {
+        return $this->get('/api/wallet/');
+    }
+
+    /**
+     * Same as /api/wallet/ but only returns the fields message, receiving_address and total.
+     *
+     * @see https://localbitcoins.net/api-docs/#wallet-balance
+     *
+     * @return mixed
+     */
+    public function walletBalance()
+    {
+        return $this->get('/api/wallet-balance/');
+    }
+
+    /**
+     * Sends amount bitcoins from the token owner's wallet to address.
+     *
+     * @see https://localbitcoins.net/api-docs/#wallet-send
+     *
+     * @param string $address Bitcoin address where you're sending Bitcoin to.
+     * @param float  $amount  Amount of Bitcoin to send.
+     *
+     * @return mixed
+     */
+    public function walletSend(string $address, float $amount)
+    {
+        return $this->post('/api/wallet-send/', compact('address', 'amount'));
+    }
+
+    /**
+     * Sends amount of bitcoins from the token owner's wallet to address, requires PIN.
+     *
+     * @param string $address Bitcoin address where you're sending Bitcoin to.
+     * @param float  $amount  Amount of Bitcoin to send.
+     * @param string $pincode Token owners PIN code. @see https://localbitcoins.net/api-docs/#pin
+     *
+     * @see https://localbitcoins.net/api-docs/#wallet-send-pin
+     *
+     * @return mixed
+     */
+    public function walletSendPin(string $address, float $amount, string $pincode)
+    {
+        return $this->post('/api/wallet-send-pin/', compact('address', 'amount', 'pincode'));
+    }
+
+    /**
+     * Gets the latest unused receiving address for the token owner's wallet.
+     *
+     * @see https://localbitcoins.net/api-docs/#wallet-addr
+     *
+     * @return mixed
+     */
+    public function walletAttr()
+    {
+        return $this->get('/api/wallet-addr/');
+    }
+
+    /**
+     * Returns outgoing and deposit fees in bitcoins (BTC).
+     *
+     * @see https://localbitcoins.net/api-docs/#fees
+     *
+     * @return mixed
+     */
+    public function fees()
+    {
+        return $this->get('/api/fees/');
     }
 }
