@@ -388,4 +388,206 @@ class Client
     {
         return $this->post("/api/feedback/$username/", compact('feedback', $msg));
     }
+
+    /**
+     * Release a trade (does not require money_pin).
+     *
+     * @param int $contact_id
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-release
+     *
+     * @return mixed
+     */
+    public function contactRelease(int $contact_id)
+    {
+        return $this->post("/api/contact_release/$contact_id/");
+    }
+
+    /**
+     * Release a trade (Requires money_pin).
+     *
+     * @param int    $contact_id Trade ID number.
+     * @param string $pincode    User Apps PIN code.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-release-pin
+     *
+     * @return mixed
+     */
+    public function contactReleasePin(int $contact_id, string $pincode)
+    {
+        return $this->post("/api/contact_release_pin/$contact_id/", compact('pincode'));
+    }
+
+    /**
+     * Mark a trade as paid.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-paid
+     *
+     * @return mixed
+     */
+    public function contactMarkAsPaid(int $contact_id)
+    {
+        return $this->post("/api/contact_mark_as_paid/$contact_id/");
+    }
+
+    /**
+     *    Return all chat messages from a specific trade ID.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-message
+     *
+     * @return mixed
+     */
+    public function contactMessages(int $contact_id)
+    {
+        return $this->get("/api/contact_messages/$contact_id/");
+    }
+
+    /**
+     *    Return all chat messages from a specific trade ID.
+     *
+     * @param int    $contact_id Trade ID number.
+     * @param string $msg        Chat message to trade chat.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-post
+     *
+     * @return mixed
+     *
+     */
+    public function contactPostMessage(int $contact_id, string $msg)
+    {
+        return $this->post("/api/contact_messages/$contact_id/", compact('msg'));
+    }
+
+    /**
+     * Starts a dispute on the trade ID.
+     *
+     * @param int    $contact_id Trade ID number.
+     * @param string $topic      Short description of issue to LocalBitcoins customer support.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-dispute
+     *
+     * @return mixed
+     *
+     */
+    public function contactDispute(int $contact_id, ?string $topic = null)
+    {
+        $data = !is_null($topic) ? compact('topic') : [];
+
+        return $this->post("/api/contact_dispute/$contact_id/", $data);
+    }
+
+    /**
+     * Cancels the trade.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-cancel
+     *
+     * @return mixed
+     */
+    public function contactCancel(int $contact_id)
+    {
+        return $this->post("/api/contact_cancel/$contact_id/");
+    }
+
+    /**
+     * Fund an unfunded Local trade from your LocalBitcoins wallet.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-fund
+     *
+     * @return mixed
+     */
+    public function contactFund(int $contact_id)
+    {
+        return $this->post("/api/contact_cancel/$contact_id/");
+    }
+
+    /**
+     * Mark realname confirmation.
+     *
+     * @param int  $contact_id          Trade ID number.
+     *
+     * @param int  $confirmation_status 1 = Name matches
+     *                                  2 = Name was different
+     *                                  3 = Name was not checked
+     *                                  4 = Name was not visible
+     * @param bool $id_confirmed        0 for false, 1 for true.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-mark-realname
+     *
+     * @return mixed
+     *
+     */
+    public function contactMarkRealname(int $contact_id, int $confirmation_status, bool $id_confirmed)
+    {
+        return $this->post("/api/contact_mark_realname/$contact_id/", compact('confirmation_status', 'id_confirmed'));
+    }
+
+    /**
+     * Mark verification of trade partner as confirmed.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-mark-identified
+     *
+     * @return mixed
+     */
+    public function contact(int $contact_id)
+    {
+        return $this->post("/api/contact_mark_identified/$contact_id/", compact('confirmation_status', 'id_confirmed'));
+    }
+
+    /**
+     * Start a trade from an advertisement.
+     *
+     * @param int    $ad_id   Advertisement ID.
+     * @param float  $amount  Number in the advertisement's fiat currency.
+     * @param string $message Optional message to send to the advertiser.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-create
+     *
+     * @return mixed
+     */
+    public function contactCreate(int $ad_id, float $amount, ?string $message = null)
+    {
+        $data = is_null($message) ? compact('amount') : compact('amount', 'message');
+
+        return $this->post("/api/contact_create/$ad_id/", $data);
+    }
+
+    /**
+     * Return information about a single trade ID.
+     *
+     * @param int $contact_id Trade ID number.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-info-id
+     *
+     * @return mixed
+     */
+    public function contactInfo(int $contact_id)
+    {
+        return $this->get("/api/contact_info/$contact_id/");
+    }
+
+    /**
+     * Return information about a single trade ID.
+     *
+     * @param array $contact_ids Trade ID numbers.
+     *
+     * @see https://localbitcoins.net/api-docs/#contact-info
+     *
+     * @return mixed
+     */
+    public function contactInfoList(array $contact_ids)
+    {
+        $contacts = implode($contact_ids);
+
+        return $this->get("/api/contact_info", compact($contacts));
+    }
 }
