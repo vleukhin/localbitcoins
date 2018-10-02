@@ -61,9 +61,15 @@ class Client
         return $this;
     }
 
-    public function test()
+    /**
+     * Returns information of the currently
+     * logged in user (the owner of authentication token)
+     *
+     * @return mixed
+     */
+    public function myself()
     {
-        return $this->request('api/wallet', ['test' => 1, 'key' => '😑ufg']);
+        return $this->request('get', '/api/myself/');
     }
 
     /**
@@ -71,8 +77,10 @@ class Client
      *
      * @param string $url
      * @param array  $data
+     *
+     * @return mixed
      */
-    protected function request(string $url, array $data)
+    protected function request(string $method, string $url, array $data = [])
     {
         $nonce = $this->generateNonce();
 
@@ -86,10 +94,14 @@ class Client
             'Apiauth-Signature' => $signature,
         ]);
 
-        return true;
+        $result = $this->curl->{$method}($url, $data);
+
+        return $result;
     }
 
     /**
+     * Generate request nonce
+     *
      * @return int
      */
     protected function generateNonce(): int
@@ -97,6 +109,15 @@ class Client
         return (int)(microtime(true) * 10000);
     }
 
+    /**
+     * Get request signature
+     *
+     * @param int    $nonce
+     * @param string $url
+     * @param array  $data
+     *
+     * @return string
+     */
     protected function getSignature(int $nonce, string $url, array $data): string
     {
         $params = http_build_query($data);
@@ -105,6 +126,6 @@ class Client
 
         var_dump($message);
 
-        return hash_hmac('sha256', $message, $this->key);
+        return mb_strtoupper(hash_hmac('SHA256', $message, $this->secret));
     }
 }
