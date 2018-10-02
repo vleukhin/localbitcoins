@@ -371,4 +371,21 @@ class Client
     {
         return $this->get('/api/fees/');
     }
+
+    /**
+     * Gives feedback to a user.
+     *
+     * @param string $username
+     *
+     * @param string $feedback Allowed values are: trust, positive, neutral, block, block_without_feedback.
+     * @param string $msg      Feedback message displayed alongside feedback on receivers profile page.
+     *
+     * @see https://localbitcoins.net/api-docs/#feedback
+     *
+     * @return mixed
+     */
+    public function feedback(string $username, string $feedback, string $msg)
+    {
+        return $this->post("/api/feedback/$username/", compact('feedback', $msg));
+    }
 }
