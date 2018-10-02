@@ -75,8 +75,6 @@ class Client
 
         $signature = $this->getSignature($nonce, $url, $data);
 
-        var_dump($signature);
-
         $this->curl->setHeaders([
             'Apiauth-Key'       => $this->key,
             'Apiauth-Nonce'     => (string)$nonce,
@@ -113,8 +111,6 @@ class Client
 
         $message = (string)$nonce . $this->key . $url . $params;
 
-        var_dump($message);
-
         return mb_strtoupper(hash_hmac('SHA256', $message, $this->secret));
     }
 
@@ -129,8 +125,25 @@ class Client
         return $this->request('get', '/api/myself/');
     }
 
+    /**
+     * Returns public user profile information.
+     *
+     * @param string $nickname
+     *
+     * @return mixed
+     */
     public function accountInfo(string $nickname)
     {
         return $this->request('get', "/api/account_info/$nickname/");
+    }
+
+    /**
+     * Returns Open and active trades.
+     *
+     * @return mixed
+     */
+    public function dashboard()
+    {
+        return $this->request('get', '/api/dashboard/');
     }
 }
