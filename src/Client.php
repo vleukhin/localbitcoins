@@ -62,17 +62,6 @@ class Client
     }
 
     /**
-     * Returns information of the currently
-     * logged in user (the owner of authentication token)
-     *
-     * @return mixed
-     */
-    public function myself()
-    {
-        return $this->request('get', '/api/myself/');
-    }
-
-    /**
      * Make API call
      *
      * @param string $url
@@ -127,5 +116,21 @@ class Client
         var_dump($message);
 
         return mb_strtoupper(hash_hmac('SHA256', $message, $this->secret));
+    }
+
+    /**
+     * Returns information of the currently
+     * logged in user (the owner of authentication token)
+     *
+     * @return mixed
+     */
+    public function myself()
+    {
+        return $this->request('get', '/api/myself/');
+    }
+
+    public function accountInfo(string $nickname)
+    {
+        return $this->request('get', "/api/account_info/$nickname/");
     }
 }
