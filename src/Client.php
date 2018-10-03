@@ -590,4 +590,34 @@ class Client
 
         return $this->get('/api/contact_info', compact($contacts));
     }
+
+    /**
+     * Returns buy Bitcoin online ads
+     *
+     * @param string $currency
+     * @param string $method
+     *
+     * @return mixed
+     * @see https://localbitcoins.net/api-docs/#local-buy
+     *
+     */
+    public function buyBitcoinsOnline(string $currency, string $method)
+    {
+        return $this->get("/buy-bitcoins-online/$currency/$method/.json");
+    }
+
+    /**
+     * Returns sell Bitcoin online ads
+     *
+     * @param string $currency
+     * @param string $method
+     *
+     * @return mixed
+     * @see https://localbitcoins.net/api-docs/#local-buy
+     *
+     */
+    public function sellBitcoinsOnline(string $currency, string $method)
+    {
+        return $this->get("/sell-bitcoins-online/$currency/$method/.json");
+    }
 }
